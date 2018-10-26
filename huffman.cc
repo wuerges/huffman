@@ -15,8 +15,11 @@ struct Tree {
     optional<char> c;
     unique_ptr<Tree> left, right;
 
-    bool operator<(const Tree& o) {
-        return freq>o.freq;
+    bool operator<(const Tree& o) const {
+        if (freq != o.freq) return freq<o.freq;
+        if (c != o.c) return c < o.c;
+        if (left != o.left) return left < o.left;
+        return right < o.right;
     }
 
     Tree(char cp, int f): freq(f), c(cp) {}
@@ -26,7 +29,7 @@ struct Tree {
 map<char,int> count;
 set<Tree> q;
 
-void getFreqs(char t[]) { 
+void getFreqs(char t[]) {
     for (int i=0; i<strlen(t); ++i) {
         count[t[i]]++;
     }
@@ -45,8 +48,8 @@ int main() {
     /*for (int i=0; i<frequency.size(); ++i) {
         cout << frequency[i] << " ";
     }*/
-    for (auto e : q) {
-        cout << e->freq << " " << *(e->c) << endl;
+    for (auto & e : q) {
+        cout << e.freq << " " << *(e.c) << endl;
     }
     return 0;
 }
